@@ -1,0 +1,182 @@
+paths:
+  /individual/claim/certificate/:
+    post:
+      tags:
+        - Individual
+      summary: individual claims a certificate
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the individual
+        required: true
+        type: "string"
+      - in: body
+        name: the certificate information
+        description: the informaiton of the certificate
+        required: true
+        schema:
+          $ref: '#/definitions/certificateInd'
+      responses:
+        201:
+          description: the information of the certificate the user claimed
+        401:
+          description: the individual is not approved by an admin or doesn't exist
+    get:
+      tags:
+        - Individual
+      summary: individual searches for claimed certificates
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the individual
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: the certificates the user claimed
+        401:
+          description: the individual is not approved by an admin or doesn't exist
+  /individual/claim/experience/:
+    post:
+      tags:
+        - Individual
+      summary: individual claims an experience certificate
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the individual
+        required: true
+        type: "string"
+      - in: body
+        name: the experience certificate information
+        description: the informaiton of the experience certificate
+        required: true
+        schema:
+          $ref: '#/definitions/experienceCertificateInd'
+      responses:
+        200:
+          description: the information of the experience certificate the user claimed
+        401:
+          description: the individual is not approved by an admin or doesn't exist
+    get:
+      tags:
+        - Individual
+      summary: individual searches for experience certificates claimed
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the individual
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: the experience certificate the user claimed
+        401:
+          description: the individual is not approved by an admin or doesn't exist
+  /individual/claim/share/:
+    post:
+      tags:
+        - Individual
+      summary: individual shares a claim
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the individual
+        required: true
+        type: "string"
+      - in: body
+        name: certificateKey
+        description: the key of the claim the user would like to share
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: the url of the shared claim
+        401:
+          description: user not activated by admin or doesn't exist or doesn't own the claim
+        404:
+          description: no file in claim to share
+  /individual/claim/:
+    get:
+      tags:
+        - Individual
+      summary: individual searches for his claimed documents
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the individual
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: all the certificates the user claimd
+        401:
+          description: user not approved or doesn't exist
+  /individual/:
+    get:
+      tags:
+        - Individual
+      summary: get individual info
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the individual
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: all user info
+        401:
+          description: user not approved or doesn't exist
+
+definitions:
+  certificateInd:
+    type: object
+    properties:
+      degreeType:
+        type: string
+        required: true
+      department:
+        type: string
+        required: true
+      claimPeriod:
+        type: string
+        required: true
+      organizationId:
+        type: string
+        required: true
+  experienceCertificateInd:
+    type: object
+    properties:
+      industry:
+        type: string
+        required: true
+      employmentId:
+        type: string
+        required: true
+      designation:
+        type: string
+        required: true
+      claimPeriod:
+        type: string
+        required: true
+      yearsOfExperience:
+        type: string
+        required: true
+      organizationId:
+        type: string
+        required: true

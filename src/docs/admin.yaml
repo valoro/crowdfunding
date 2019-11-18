@@ -1,0 +1,260 @@
+paths:
+  /admin/individual/activate/{id}/:
+    post:
+      tags:
+        - Admin
+      summary: admin activates an individual by id
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      - in: path
+        name: id
+        description: the id of the individual the admin activates
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the status of the individual is now activated
+        401:
+          description: the user is not an admin user
+  /admin/individual/deactivate/{id}/:
+    post:
+      tags:
+        - Admin
+      summary: admin deactivates an individual by id
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      - in: path
+        name: id
+        description: the id of the individual the admin deactivates
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the status of the individual is now deactivated
+        401:
+          description: the user is not an admin user
+  /admin/organization/activate/{id}/:
+    post:
+      tags:
+        - Admin
+      summary: admin activates an organization by id
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      - in: path
+        name: id
+        description: the id of the organization the admin activates
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the status of the organization is now activated
+        401:
+          description: the user is not an admin user
+  /admin/organization/deactivate/{id}/:
+    post:
+      tags:
+        - Admin
+      summary: admin deactivates an organization by id
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      - in: path
+        name: id
+        description: the id of the organization the admin deactivates
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the status of the organization is now deactivated
+        401:
+          description: the user is not an admin user
+  /admin/individual/:
+    get:
+      tags:
+        - Admin
+      summary: admin get all individuals
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: all individual information
+        401:
+          description: the user in not admin user
+  /admin/organization/:
+    get:
+      tags:
+        - Admin
+      summary: admin get all organization
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: all organization information
+        401:
+          description: the user in not admin user
+  /admin/admin/:
+    get:
+      tags:
+        - Admin
+      summary: admin get all admins
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: all admins information
+        401:
+          description: the user in not admin user
+  /admin/admin/{id}/:
+    get:
+      tags:
+        - Admin
+      summary: get admin by id
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      - in: path
+        name: id
+        description: id of the required individual
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: all admins information
+        401:
+          description: the user in not admin user
+  /admin/individual/{id}/:
+    get:
+      tags:
+        - Admin
+      summary: admin get individuals by id
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      - in: path
+        name: id
+        description: id of the required individual
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: individual information
+        401:
+          description: the user in not admin user
+    delete:
+      tags:
+        - Admin
+      summary: delete individual by id
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      - in: path
+        name: id
+        description: id of the required individual
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: deleted individual information
+        401:
+          description: the user in not admin user
+  /admin/organization/{id}/:
+    get:
+      tags:
+        - Admin
+      summary: admin get organization by id
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      - in: path
+        name: id
+        description: id of the required organization
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: organization information
+        401:
+          description: the user in not admin user
+    delete:
+      tags:
+        - Admin
+      summary: delete organization by id
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: admin token
+        required: true
+        type: "string"
+      - in: path
+        name: id
+        description: id of the required organization
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: deleted organization information
+        401:
+          description: the user in not admin user

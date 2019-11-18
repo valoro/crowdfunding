@@ -1,0 +1,33 @@
+paths:
+  /reset/email/:
+    post:
+      tags:
+        - ResetInformation
+      summary: user request to reset his email
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the organization
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the email has been sent
+  /reset/password/:
+    post:
+      tags:
+        - ResetInformation
+      summary: user request to reset his password
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the organization
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the email has been sent

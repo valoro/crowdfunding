@@ -1,0 +1,192 @@
+paths:
+  /individual/mobile/:
+    post:
+      tags:
+        - Individual
+      summary: verify the mobile with one time password
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: information
+        description: It enables a user to verify its mobile
+        required: true
+        schema:
+          $ref: '#/definitions/userOTP'
+      responses:
+        200:
+          description: the verification has been done successfully
+  /organization/mobile/:
+    post:
+      tags:
+        - Organization
+      summary: verify the mobile with one time password
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: information
+        description: It enables a user to verify its mobile
+        required: true
+        schema:
+          $ref: '#/definitions/userOTP'
+      responses:
+        200:
+          description: the verification has been done successfully
+  /individual/password/{token}/:
+    post:
+      tags:
+        - Individual
+      summary: individual reset password after recieving email
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: token
+        description: the token found in the email
+        required: true
+        type: "string"
+      - in: body
+        name: information
+        description: the new password
+        required: true
+        schema:
+          $ref: '#/definitions/resetPassword'
+      responses:
+        200:
+          description: the password reset done
+  /organization/password/{token}/:
+    post:
+      tags:
+        - Organization
+      summary: organization reset password after recieving email
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: token
+        description: the token found in the email
+        required: true
+        type: "string"
+      - in: body
+        name: information
+        description: the new password
+        required: true
+        schema:
+          $ref: '#/definitions/resetPassword'
+      responses:
+        200:
+          description: the password reset done
+  /individual/email/{token}/:
+    post:
+      tags:
+        - Individual
+      summary: individual reset email after recieving email
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: token
+        description: the token found in the email
+        required: true
+        type: "string"
+      - in: body
+        name: information
+        description: the new password
+        required: true
+        schema:
+          $ref: '#/definitions/resetEmail'
+      responses:
+        200:
+          description: the email reset done
+  /organization/email/{token}/:
+    post:
+      tags:
+        - Organization
+      summary: organization reset email after recieving email
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: token
+        description: the token found in the email
+        required: true
+        type: "string"
+      - in: body
+        name: information
+        description: the new password
+        required: true
+        schema:
+          $ref: '#/definitions/resetPassword'
+      responses:
+        200:
+          description: the email reset done
+  /individual/mobile/resend/:
+    post:
+      tags:
+        - Individual
+      summary: resending one time password
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: verify through one time password
+        description: it enables the user to reset his one time password
+        required: true
+        schema:
+          $ref: '#/definitions/userResend' 
+      responses:       
+        200:
+          description: the code had been sent
+  /organization/mobile/resend/:
+    post:
+      tags:
+        - Organization
+      summary: resending one time password
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: verify through one time password
+        description: it enables the user to reset his one time password
+        required: true
+        schema:
+          $ref: '#/definitions/userResend' 
+      responses:       
+        200:
+          description: the code had been sent
+
+definitions:       
+  userOTP:
+    type: object
+    properties:
+      userType:
+        type: string
+        required: true
+      identityNumber:
+        type: string
+        required: true
+      oneTimePassword:
+        type: string
+        required: true
+  userResend:
+    type: object
+    properties:
+      identityNumber:
+        type: string
+        required: true
+  resetPassword:
+    type: object
+    properties:
+      newPassword:
+        type: string
+        required: true
+      newPasswordRepeat:
+        type: string
+        required: true
+  resetEmail:
+    type: object
+    properties:
+      email:
+        type: string
+        required: true

@@ -1,0 +1,170 @@
+paths:
+  /organization/claim/approve/{claimId}/:
+    post:
+      tags:
+        - Organization
+      summary: organization approves a certain certificate
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the organization
+        required: true
+        type: "string"
+      - in: path
+        name: claimId
+        description: the id of the claim the organziation wants to approve
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the informaiton of the certificate has been approved
+        401:
+          description: organization is not the owner of the claim
+  /organization/claim/:
+    get:
+      tags:
+        - Organization
+      summary: organization searches for its claims
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the organization
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the list of claims of the organization
+  /organization/claim/certificate/:
+    get:
+      tags:
+        - Organization
+      summary: organization searches for its certificate claims
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the organization
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the list of certificate claims of the organization
+  /organization/claim/experience/:
+    get:
+      tags:
+        - Organization
+      summary: organization searches for its experience claims
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the organization
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: the list of experience claims of the organization
+  /organization/certificate/:
+    post:
+      tags:
+        - Organization
+      summary: organization sets the information of its certificates
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: organization verification token
+        required: true
+        type: "string"
+      - in: body
+        name: data
+        description: departments and degreeTypes of the certificates of organization
+        required: true
+        schema:
+            $ref: '#/definitions/orgCertificate'
+      responses:
+        200:
+          description: the required organization informationd
+  /organization/experience/:
+    post:
+      tags:
+        - Organization
+      summary: organization sets the information of its experience certificates
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: organization verification token
+        required: true
+        type: "string"
+      - in: body
+        name: data
+        description: industries and designations of the organization
+        required: true
+        schema:
+            $ref: '#/definitions/orgExperience'
+      responses:
+        200:
+          description: the required organization informationd
+  /organization/available/:
+    get:
+      tags:
+        - info
+      summary: get all available organizations
+      produces:
+      - application/json
+      responses:
+        200:
+          description: all organizations available
+  /organization/:
+    get:
+      tags:
+        - Organization
+      summary: organization gets all info
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: authorization
+        description: the token to verify the organization
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: organization info
+
+definitions:
+  orgCertificate:
+    type: object
+    properties:
+      degreeTypes:
+        type: array
+        required: true
+        items:
+          type: string
+      departments:
+        type: array
+        required: true
+        items:
+          type: string
+  orgExperience:
+    type: object
+    properties:
+      industries:
+        type: array
+        required: true
+        items:
+          type: string
+      designations:
+        type: array
+        required: true
+        items:
+          type: string

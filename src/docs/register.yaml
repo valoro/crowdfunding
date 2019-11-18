@@ -1,0 +1,208 @@
+paths:
+  /admin/register/:
+    post:
+      tags:
+        - Register
+      summary: creates a new admin user
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: sign up
+          description: It enables an admin user to create another admin user
+          required: true
+          schema:
+            $ref: '#/definitions/adminRegister'
+      responses:
+        200:
+          description: An object with admin details
+        401:
+          description: the user is not an admin user
+  /admin/authenticate/:
+    post:
+      tags:
+        - Authentication
+      summary: admin login
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: login
+          description: It provide the admin with a token
+          required: true
+          schema:
+            $ref: '#/definitions/adminAuth'
+      responses:
+        200:
+          description: An object with user details and token
+        401:
+          description: the user is not an admin user
+  /individual/register/:
+    post:
+      tags:
+        - Register
+      summary: creates a new individual user
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: sign up
+          description: A new user/student register
+          required: true
+          schema:
+            $ref: '#/definitions/individualRegister'
+      responses:
+        200:
+          description: An object with user details
+  /individual/authenticate/:
+    post:
+      tags:
+        - Authentication
+      summary: individual login
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: login
+          description: It provide the user with a token
+          required: true
+          schema:
+            $ref: '#/definitions/individualAuth'
+      responses:
+        200:
+          description: An object with user details and token
+  /organization/register/:
+    post:
+      tags:
+        - Register
+      summary: creates a new organization user
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: sign up
+          description: A new user/organization register
+          required: true
+          schema:
+            $ref: '#/definitions/organizationRegister'
+      responses:
+        200:
+          description: An object with user details
+  /organization/authenticate/:
+    post:
+      tags:
+        - Authentication
+      summary: organization login
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: login
+          description: It provide the user with a token
+          required: true
+          schema:
+            $ref: '#/definitions/organizationAuth'
+      responses:
+        200:
+          description: An object with user details and token
+
+definitions:
+  adminRegister:
+    type: object
+    properties:
+      name:
+        type: string
+        required: true
+      email:
+        type: string
+        required: true
+      password:
+        type: string
+        required: true
+      repeatPassword:
+        type: string
+        required: true
+      identityNumber:
+        type: string
+        required: true
+      mobile:
+        type: string
+        required: true
+  adminAuth:
+    type: object
+    properties:
+      identityNumber:
+        type: string
+        required: true
+      password:
+        type: string
+        required: true
+  individualRegister:
+    type: object
+    properties:
+      name:
+        type: string
+        required: true
+      email:
+        type: string
+        required: true
+      password:
+        type: string
+        required: true
+      repeatPassword:
+        type: string
+        required: true
+      identityNumber:
+        type: string
+        required: true
+      mobile:
+        type: string
+        required: true
+  individualAuth:
+    type: object
+    properties:
+      identityNumber:
+        type: string
+        required: true
+      password:
+        type: string
+        required: true
+  organizationRegister:
+    type: object
+    properties:
+      name:
+        type: string
+        required: true
+      email:
+        type: string
+        required: true
+      password:
+        type: string
+        required: true
+      repeatPassword:
+        type: string
+        required: true
+      identityNumber:
+        type: string
+        required: true
+      mobile:
+        type: string
+        required: true
+      organizationName:
+        type: string
+        required: true
+      organizationRegistrationNumber:
+        type: string
+        required: true
+      fileUpload:
+        type: string
+        required: true
+  organizationAuth:
+    type: object
+    properties:
+      identityNumber:
+        type: string
+        required: true
+      password:
+        type: string
+        required: true
