@@ -166,7 +166,7 @@ class cvs extends Contract {
         return JSON.stringify(await getAssetByProp(ctx, properties));
     }
     async createOrganization(ctx, userInput) {
-        console.info("------------------begin createOrganization----------------");
+        console.info("-------------------------------------begin createOrganization---------------------");
         let organizationSchema = {
             name : 'organizationSchema',
             properties : [{
@@ -192,14 +192,13 @@ class cvs extends Contract {
         userInput.status = 'pending';
  
         console.info("the input after adding the status is " + userInput);
-        //userInput.events = [];
-        //events.push({name : tagh });
-        //console.info("the input after creating an empty array");
+        userInput.events = [];
+        console.dir(userInput);
         console.info('the new key of the organization is '+ newKey);
 
         await ctx.stub.putState(newKey, Buffer.from(JSON.stringify(userInput)));
         console.info(JSON.stringify({ key : newKey, Record : userInput}));
-        console.info("------------------end createOrganization----------------");
+        console.info("--------------------------------end createOrganization---------------------------");
         return JSON.stringify({
             key : newKey,
             Record : userInput
@@ -207,7 +206,7 @@ class cvs extends Contract {
         
     }
     async createEvent(ctx,userInput) {
-        console.info("------------------begin createEvent----------------");
+        console.info("-----------------------------------------begin createEvent---------------------------------");
         let eventSchema = {
             name : 'eventSchema',
             properties : [{
@@ -230,18 +229,6 @@ class cvs extends Contract {
                 name : 'organizationId',
                 type : 'string',
                 required : 'true'
-            },{
-                name : 'donatedAmount',
-                type : 'number',
-                required : 'true'
-            },{
-                name : 'startDate',
-                type : 'string',
-                required : 'true'
-            },{
-                name : 'donationsId',
-                type : 'array',
-                required : 'false'
             }]
         }
         await createAssetObj(ctx, JSON.stringify(eventSchema), userInput);
@@ -256,18 +243,36 @@ class cvs extends Contract {
         console.info("the organization of the event is " + organizations);
 
         if(organizations.length === 0) throw new Error(`organization ${userInput.organizationId} doesn't exist!`);
-        //let org = organizaitons[0];
+        let organizaiton = organizations[0];
+        if(organizaiton.Record.status !== 'confirmed'){
+            throw new Error(` the organization ${userInput.organizationId} is not confirmed by the system`);
+        }
+
+        userInput.donationIds = [];
+        userInput.startDate = ctx.stub.getTxTimestamp().seconds.low.toString();
+        userInput.donatedAmount = 0;
 
         let newKey = 'Event_' + userInput.eventId + '_organizationId_' + userInput.organizationId + '_' + ctx.stub.getTxTimestamp().seconds.low.toString();
 
         console.info("the new key of the event is " + newKey);
+
+        let events = organizaiton.Record.events;
+        events.push(userInput);
+
+        let org = await editAsset(ctx, organizaiton.Key , JSON.stringify({
+            events : events
+        }))
+        console.info("the organization added is : ");
+        console.dir(org);
+        console.log(" the events are : " + events);
+        console.dir(events[0]);
 
         await ctx.stub.putState(newKey, Buffer.from(JSON.stringify(userInput)));
         console.info(JSON.stringify({
             Key : newKey,
             Record : userInput
         }));
-        console.info("------------------end createEvent----------------");
+        console.info("------------------------------------------end createEvent----------------------------------");
 
         return JSON.stringify({
             Key : newKey,
@@ -275,7 +280,7 @@ class cvs extends Contract {
         })
     }
     async createDonations(ctx,userInput) {
-        console.info("------------------begin createDonations----------------");
+        console.info("--------------------------------begin createDonations----------------------------------");
 
         let donationSchema = {
             name : 'donationSchema',
@@ -293,7 +298,7 @@ class cvs extends Contract {
                 required : 'true'
             },{
                 name : 'donationAmount',
-                type : 'string',
+                type : 'number',
                 required : 'true'  
             }]
         }
@@ -306,10 +311,11 @@ class cvs extends Contract {
             eventId : userInput.eventId
         }));
 
-        console.info("the event of the donation is " + events);
-        console.dir(events);
         if(events.length === 0) throw new Error(`organization ${userInput.eventId} doesn't exist!`);
         let event = events[0];
+
+        console.info("the event of the donation is " + events);
+        console.dir(events[0]);
 
         let users = await getAssetByProp(ctx, JSON.stringify({
             userId : userInput.userId
@@ -317,24 +323,45 @@ class cvs extends Contract {
         if(users.length === 0) throw new Error(`organization ${userInput.userId} doesn't exist!`);
         //let user = users[0];
 
-        console.info("the user of the donation is  " );;
+        console.info("the user of the donation is  " );
+
+        let date = ctx.stub.getTxTimestamp().seconds.low.toString();
+        let dateDifference = parseInt(event.Record.startDate) - parseInt(date);
+        let differenceDays = dateDifference /(1000 * 36 * 24);
+        if(differenceDays > event.Record.eventDuration){
+            throw new Error (` the time of the event ${ userInput.eventId} has ended`);
+        }
+        console.info("after checking the time difference : " + dateDifference + ' _ ' + differenceDays);
+
+        event.Record.donatedAmount = event.Record.donatedAmount + userInput.donatedAmount;
+        if(event.Record.donatedAmount > event.Record.requiredAmount){
+            throw new Error(`the event ${ userInput.eventId} has ended`);
+        }
+
         let newKey = 'donation_' + userInput.donationId + '_eventId_' + userInput.eventId + '_userId_ '+ userInput.userId + '_' + ctx.stub.getTxTimestamp().seconds.low.toString();
 
         console.info("the new key of the donation is " + newKey);
         await ctx.stub.putState(newKey, Buffer.from(JSON.stringify(userInput)));
 
+        let donationsArray = event.Record.donationIds;
+        donationsArray.push(userInput);
+
+        let eventEdited = await editAsset(ctx, event.Key , JSON.stringify({
+            donationIds : donationsArray
+        }))
+
         console.info(JSON.stringify({
             Key : newKey,
             Record : userInput
         }));
-        console.info("------------------begin createDonations----------------");
+        console.info("-----------------------------end createDonations------------------------------------------");
         return JSON.stringify({
             Key : newKey,
             Record : userInput
         })
     }
     async createUser(ctx, userInput){
-        console.info("------------------begin createUser----------------");
+        console.info("--------------------------------------begin createUser----------------------------------");
 
         let userSchema = {
             name : 'userSchema',
@@ -369,14 +396,14 @@ class cvs extends Contract {
             key : newKey,
             Record : userInput
         }));
-        console.info("------------------end createUser----------------");
+        console.info("--------------------------------------------end createUser--------------------------------");
         return JSON.stringify({
             key : newKey,
             Record : userInput
         })
     }
     async adminConfirm(ctx,organizationId){
-        console.info("------------------begin createUser----------------");
+        console.info("-------------------------------------------begin admin confrim-------------------------------");
         let organizations = await getAssetByProp(ctx, JSON.stringify({
             organizationId : organizationId
         }));
@@ -387,7 +414,7 @@ class cvs extends Contract {
             status : 'confirmed'
         }))
         console.info(JSON.stringify({ key : organizations[0].Key , Record : organization}));
-        console.info("------------------begin createUser----------------");
+        console.info("----------------------------------------end admin confirm------------------------------------");
 
         return JSON.stringify({ key : organizations[0].Key , Record : organization});
     }

@@ -24,12 +24,9 @@ async function main() {
     await fabric.Asset.transactionExcute(['submit','createEvent', JSON.stringify({
         eventName : 'event health',
         eventId : "event1",
-        requiredAmount : 10,
+        requiredAmount : 3,
         eventDuration : '3 days',
         organizationId : 'organization1',
-        donatedAmount : 1,
-        startDate : '3 october',
-        donationsId : ['11','12']
     })]);
     await fabric.Asset.transactionExcute(['submit','createDonations', JSON.stringify({
         donationId : 'donation1',
